@@ -1,0 +1,126 @@
+#
+# Major installer and launcher patch 2026
+#
+
+setchart CraftableItemChart
+
+def decreeboard:emuferal:emuferal_2026_installerpatch
+	{
+		"templateClass": "DecreeTemplate",
+		"templateFormatHash": "5f8ba791578e887d01abbf928e547f2f",
+		"components": [
+			{
+				"componentClass": "DecreeDefComponent",
+				"componentJSON": {
+					"localizedHeaderDefId": "decreeboard:emuferal:emuferal_2026_installerpatch.header.text",
+					"localizedMessageDefId": "decreeboard:emuferal:emuferal_2026_installerpatch.message.text",
+					"imageDefID": "decreeboard:emuferal:emuferal_2026_installerpatch.image",
+					"decreeCategory": 0,
+					"decreeLayoutType": 3
+				}
+			},
+			{
+				"componentClass": "AvailabilityDefComponent",
+				"componentJSON":
+				{
+				    "dateOverrideRef": {
+				        "_defID": "-1"
+				    },
+				    "chartDateAvailability": {
+				        "_ignoreYear": true,
+				        "_repeatMode": 1,
+				        "_dateStart": "",
+				        "_dateEnd": ""
+				    }
+				}
+			},
+			{
+				"componentClass": "DecreeDateDefComponent",
+				"componentIsCustom": true,
+				"componentJSON": {
+					"decreeDate": "06/09/2026"
+				}
+			}
+		]
+	}
+enddef
+
+setchart ImageChart
+
+def decreeboard:emuferal:emuferal_2026_installerpatch.image
+	{
+		"templateClass": "ImageTemplate",
+		"templateFormatHash": "93b3555cd5408f926301bfa0fda6218e",
+		"components": [
+			{
+				"componentClass": "BundleIDDefComponent",
+				"componentJSON": {
+					"bundle": {
+						"bundlePath": "Images/DecreeBoard/10_2020/Cindernoct"
+					}
+				}
+			},
+			{
+				"componentClass": "ImageDefComponent",
+				"componentJSON": {
+					"localize": false,
+					"highQualityAndLowQuality": false,
+					"bundleIDArray": [],
+					"calendarRefArray": {
+						"_defIDs": []
+					}
+				}
+			}
+		]
+	}
+enddef
+
+setchart LocalizationChart
+
+def decreeboard:emuferal:emuferal_2026_installerpatch.header.text
+	{
+		"templateClass": "LocalizationTemplate",
+		"templateFormatHash": "392f1dafc8ef6ce858720cbef5e34ebc",
+		"components": [
+			{
+				"componentClass": "LocalizationDefComponent",
+				"componentJSON": {
+					"needsTranslation": true,
+					"en": "Welcome back to Fer.al!",
+					"fr": "",
+					"de": "",
+					"es": "",
+					"pt": ""
+				}
+			},
+			{
+				"componentClass": "OldLocalizationDefComponent",
+				"componentJSON": {}
+			}
+		]
+	}
+enddef
+
+def decreeboard:emuferal:emuferal_2026_installerpatch.message.text
+	{
+		"templateClass": "LocalizationTemplate",
+		"templateFormatHash": "392f1dafc8ef6ce858720cbef5e34ebc",
+		"components": [
+			{
+				"componentClass": "LocalizationDefComponent",
+				"componentJSON": {
+					"needsTranslation": true,
+					"en": "<size=120%><b>Welcome back to Fer.al!</b></size>\nWelcome back to Fer.al! It has been a while since we have posted an ingame announcement, but we wanted to at least notify about the updated installers.\n\nWe have overhauled the launcher and installer, while mostly behind the scenes this is a major transition, including some critical bugfixes. We also hope to shed some light on the current state of the server and development project, but first, there is some important things to know about the installer below.\n\n\n<size=120%><b>Launcher and installer patches</b></size>\nThe recent installer bug relating to uninstallation of the game has been patched, <b><u>if you still have old EmuFeral installer executables, may this be on Windows, MacOS and/or Linux, we highly urge deleting them just in case should they be outdated</u></b>. With this bug fixed, our servers are once again stable!\n\nThe patches included with this release of the launcher:\n - <b>!!! Fixed the installer deleting the full folder instead of only installer-made files in the target installation directory (this patches the issue where non-default installations could lead to unexpected file deletion if emuferal wasnt installed to a subdirectory) !!!</b>\n - Improved wine detection! There have been many fixes related to wine detection on MacOS and Linux!\n - Configuration of launcher installation settings such as shortcuts and wine is now more reliable. (now properly saves with non-default installations)\n - MacOS CrossOver is now partially supported in wine selection!\n\nIf you haven't yet, we recommend downloading the latest installers from #emuferal-download-info, using the installer's \"Modify or repair installation\" function, you can install the latest version of the launcher and game, eliminating the bug in question, the installers were updated on the 9th of June 2026.\n\n<b>Note:</b> <u>it is highly recommended to delete any old emuferal installer executables that may be affected by the Uninstallation Data Loss bug reported in #emuferal-announcement (see pins in discord), any installer downloaded post 9th of June 2026 is unaffected</u>\n\nSee the in-discord accompanying announcement for more info.\n\n\n<size=120%><b>What to expect further</b></size>\nWe acknowledge that updates have been a bit slow lately, we are working hard on getting 1.7.4 ready for release, but currently the focus is on maintenance and making sure the code is actually workable for our team.\n\nThis means that while we will work as hard as possible to repair crucial bugs, the focus right now is improving the development environment surrounding the emulator.\n\nThe first focus is to get the emu back to a point that updates can be reliably produced again, as the current updating mechanism no longer functions we have been having to manually release patches to the server the past updates which has not been doable, which is why we are rewriting the updater mechanism first.\n\nOnce the updater is repaired, our focus is to make sure other developers can contribute actively again to the emulator, as well as making sure community devs can easily build and run their own servers. Once that is out of the way we will be able to release updates again!\n\nWe apologize about how quiet things have been, there has been a lot of technical work thats been progressing slowly due to our team being somewhat small, but once this is out of the way, creating updates should become doable again and fixes to the game will start rolling out again!\n\n\n<size=120%><b>Clarifying the focus and direction of development</b></size>\nWe also wanted to clarify the immediate focus and give a partial roadmap of what we are working on in the discord announcement, while we havent refined anything, we can at least tell the focus and direction points we hope to take with the emulator!\n\n\nSince its a bit too long for posting here, here's a summarized version: we will mostly be focusing on stability for now, getting the emulator back into development shape, this involves stability updates and cleaning, but also <u>improvements to moderation and registrationso we wont be dependent on discord!!!</u> (i do want to clarify, we arent dependent on discord for login, its just our account panel currently is discord-only, which is a bit troublesome)\n\nOnce the main code maintenance is done and the emu can be more actively develped again, it will be possible to develop multiple features parallel without delaying one another, this means eg. major features can be worked on alongside one another, eg. a gameplay fix being worked on alongside a new registration system, without either update having to delay the other.\n\nPost-core-maintenance will prioritize gameplay fixes and updates such as reimplementing quests and minigames of the og game alongside patching server issues. Community servers and save transfers from/to community servers, as well as implementing better support for mods / community content will be the focus afterwards!\n\nYou can find the rest of the roadmap in the accompanying Discord announcement under #emuferal-announcements.\n\n\nThats all for now! There is more planned but right now this is mostly whats currently refined. We do still hope to rewrite the emulator's servers for stability and to make the game playable offline, but hope to do so alongside maintaining the current Centuria server.\n\n\nThank you for reading! Stay Fer.al!",
+					"fr": "",
+					"de": "",
+					"es": "",
+					"pt": ""
+				}
+			},
+			{
+				"componentClass": "OldLocalizationDefComponent",
+				"componentJSON": {}
+			}
+		]
+	}
+enddef

@@ -38,7 +38,7 @@ def decreeboard:emuferal:springevent2024
 				"componentClass": "DecreeDateDefComponent",
 				"componentIsCustom": true,
 				"componentJSON": {
-					"decreeDate": "03/17/2024"
+					"decreeDate": "03/15/2024"
 				}
 			}
 		]
