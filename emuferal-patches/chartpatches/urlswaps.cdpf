@@ -12,9 +12,9 @@ patch 7123
 			{
 				"componentClass": "URLDefComponent",
 				"componentJSON": {
-					"dev": "https://emuferal.ddns.net/register.html",
-					"stage": "https://emuferal.ddns.net/register.html",
-					"prod": "https://emuferal.ddns.net/register.html"
+					"dev": "https://emuferal.openferal.net/register.html",
+					"stage": "https://emuferal.openferal.net/register.html",
+					"prod": "https://emuferal.openferal.net/register.html"
 				}
 			}
 		]
@@ -33,9 +33,9 @@ patch 3962
 			{
 				"componentClass": "URLDefComponent",
 				"componentJSON": {
-					"dev": "https://emuferal.ddns.net/termsofservice.html",
-					"stage": "https://emuferal.ddns.net/termsofservice.html",
-					"prod": "https://emuferal.ddns.net/termsofservice.html"
+					"dev": "https://emuferal.openferal.net/termsofservice.html",
+					"stage": "https://emuferal.openferal.net/termsofservice.html",
+					"prod": "https://emuferal.openferal.net/termsofservice.html"
 				}
 			}
 		]
@@ -54,9 +54,9 @@ patch 46
 			{
 				"componentClass": "URLDefComponent",
 				"componentJSON": {
-					"dev": "https://emuferal.ddns.net/termsofservice.html",
-					"stage": "https://emuferal.ddns.net/termsofservice.html",
-					"prod": "https://emuferal.ddns.net/termsofservice.html"
+					"dev": "https://emuferal.openferal.net/termsofservice.html",
+					"stage": "https://emuferal.openferal.net/termsofservice.html",
+					"prod": "https://emuferal.openferal.net/termsofservice.html"
 				}
 			}
 		]
@@ -96,9 +96,9 @@ patch 45
 			{
 				"componentClass": "URLDefComponent",
 				"componentJSON": {
-					"dev": "https://emuferal.ddns.net",
-					"stage": "https://emuferal.ddns.net",
-					"prod": "https://emuferal.ddns.net"
+					"dev": "https://emuferal.openferal.net",
+					"stage": "https://emuferal.openferal.net",
+					"prod": "https://emuferal.openferal.net"
 				}
 			}
 		]
@@ -113,9 +113,9 @@ patch 55
 			{
 				"componentClass": "URLDefComponent",
 				"componentJSON": {
-					"dev": "https://emuferal.ddns.net",
-					"stage": "https://emuferal.ddns.net",
-					"prod": "https://emuferal.ddns.net"
+					"dev": "https://emuferal.openferal.net",
+					"stage": "https://emuferal.openferal.net",
+					"prod": "https://emuferal.openferal.net"
 				}
 			}
 		]
@@ -130,9 +130,9 @@ patch 44
 			{
 				"componentClass": "URLDefComponent",
 				"componentJSON": {
-					"dev": "https://emuferal.ddns.net",
-					"stage": "https://emuferal.ddns.net",
-					"prod": "https://emuferal.ddns.net"
+					"dev": "https://emuferal.openferal.net",
+					"stage": "https://emuferal.openferal.net",
+					"prod": "https://emuferal.openferal.net"
 				}
 			}
 		]
@@ -151,9 +151,9 @@ patch 49
 			{
 				"componentClass": "URLDefComponent",
 				"componentJSON": {
-					"dev": "https://emuferal.ddns.net",
-					"stage": "https://emuferal.ddns.net",
-					"prod": "https://emuferal.ddns.net"
+					"dev": "https://emuferal.openferal.net",
+					"stage": "https://emuferal.openferal.net",
+					"prod": "https://emuferal.openferal.net"
 				}
 			}
 		]

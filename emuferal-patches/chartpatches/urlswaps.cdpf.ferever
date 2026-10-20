@@ -12,9 +12,9 @@ patch 7123
 			{
 				"componentClass": "URLDefComponent",
 				"componentJSON": {
-					"dev": "https://emuferal.ddns.net/register.html",
-					"stage": "https://emuferal.ddns.net/register.html",
-					"prod": "https://emuferal.ddns.net/register.html"
+					"dev": "https://emuferal.openferal.net/register.html",
+					"stage": "https://emuferal.openferal.net/register.html",
+					"prod": "https://emuferal.openferal.net/register.html"
 				}
 			}
 		]
