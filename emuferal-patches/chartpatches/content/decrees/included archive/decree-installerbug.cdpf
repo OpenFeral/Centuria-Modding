@@ -1,0 +1,127 @@
+#
+# Installer bug announcement
+#
+
+setchart CraftableItemChart
+
+def decreeboard:emuferal:emuferal_b171_installerbugalert
+	{
+		"templateClass": "DecreeTemplate",
+		"templateFormatHash": "5f8ba791578e887d01abbf928e547f2f",
+		"components": [
+			{
+				"componentClass": "DecreeDefComponent",
+				"componentJSON": {
+					"localizedHeaderDefId": "decreeboard:emuferal:emuferal_b171_installerbugalert.header.text",
+					"localizedMessageDefId": "decreeboard:emuferal:emuferal_b171_installerbugalert.message.text",
+					"imageDefID": "decreeboard:emuferal:emuferal_b171_installerbugalert.image",
+					"decreeCategory": 0,
+					"decreeLayoutType": 3
+				}
+			},
+			{
+				"componentClass": "AvailabilityDefComponent",
+				"componentJSON":
+				{
+				    "dateOverrideRef": {
+				        "_defID": "-1"
+				    },
+				    "chartDateAvailability": {
+				        "_ignoreYear": true,
+				        "_repeatMode": 1,
+				        "_dateStart": "",
+				        "_dateEnd": ""
+				    }
+				}
+			},
+			{
+				"componentClass": "DecreeDateDefComponent",
+				"componentIsCustom": true,
+				"componentJSON": {
+					"decreeDate": "12/05/2023"
+				}
+			}
+		]
+	}
+enddef
+
+setchart ImageChart
+
+#						"bundlePath": "EmuFeral/Images/Decrees/EmuFeral_B171/InstallerBugAlertImage"
+def decreeboard:emuferal:emuferal_b171_installerbugalert.image
+	{
+		"templateClass": "ImageTemplate",
+		"templateFormatHash": "93b3555cd5408f926301bfa0fda6218e",
+		"components": [
+			{
+				"componentClass": "BundleIDDefComponent",
+				"componentJSON": {
+					"bundle": {
+						"bundlePath": "Images/DecreeBoard/10_2020/Cindernoct"
+					}
+				}
+			},
+			{
+				"componentClass": "ImageDefComponent",
+				"componentJSON": {
+					"localize": false,
+					"highQualityAndLowQuality": false,
+					"bundleIDArray": [],
+					"calendarRefArray": {
+						"_defIDs": []
+					}
+				}
+			}
+		]
+	}
+enddef
+
+setchart LocalizationChart
+
+def decreeboard:emuferal:emuferal_b171_installerbugalert.header.text
+	{
+		"templateClass": "LocalizationTemplate",
+		"templateFormatHash": "392f1dafc8ef6ce858720cbef5e34ebc",
+		"components": [
+			{
+				"componentClass": "LocalizationDefComponent",
+				"componentJSON": {
+					"needsTranslation": true,
+					"en": "CRITICAL ANNOUNCEMENT",
+					"fr": "",
+					"de": "",
+					"es": "",
+					"pt": ""
+				}
+			},
+			{
+				"componentClass": "OldLocalizationDefComponent",
+				"componentJSON": {}
+			}
+		]
+	}
+enddef
+
+def decreeboard:emuferal:emuferal_b171_installerbugalert.message.text
+	{
+		"templateClass": "LocalizationTemplate",
+		"templateFormatHash": "392f1dafc8ef6ce858720cbef5e34ebc",
+		"components": [
+			{
+				"componentClass": "LocalizationDefComponent",
+				"componentJSON": {
+					"needsTranslation": true,
+					"en": "We have recently discovered a potentially dangerous bug in the <u>unininstallation process</u> of the Project Edge and EmuFeral installers (only applies to installers downloaded before 11/08/2023) that can cause damage to user profiles on Linux and MacOS clients.\n\n\nThe issue has been resolved however please note that any installers from before this announcement <b>WILL STILL HAVE THE BUG</b>, it is highly recommended to delete any EmuFeral and Project Edge installer you may have saved on your device.\n\n<b>When removing old installers or uninstalling the game, MAKE SURE YOU HAVE THE LATEST INSTALLER or else the bug will be triggered.</b> If you are uncertain of your installer version, simply delete the installer file.\n\nFor more details please head to our Discord Server: <color=\"blue\">https://discord.gg/ferever</color>",
+					"fr": "",
+					"de": "",
+					"es": "",
+					"pt": ""
+				}
+			},
+			{
+				"componentClass": "OldLocalizationDefComponent",
+				"componentJSON": {}
+			}
+		]
+	}
+enddef
