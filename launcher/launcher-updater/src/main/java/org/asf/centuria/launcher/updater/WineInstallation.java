@@ -60,23 +60,19 @@ public class WineInstallation {
 			}
 
 			// Find default proton versions
-			File steamappsCommonDefault = new File(
-					System.getProperty("user.home") + "/.steam/steam/steamapps/common");
+			File steamappsCommonDefault = new File(System.getProperty("user.home") + "/.steam/steam/steamapps/common");
 			if (steamappsCommonDefault.exists()) {
 				findProtonVersions("User Proton: ", steamappsCommonDefault, installs, protonVersions);
 			}
-			steamappsCommonDefault = new File(
-					System.getProperty("user.home") + "/.steam/root/steamapps/common");
+			steamappsCommonDefault = new File(System.getProperty("user.home") + "/.steam/root/steamapps/common");
 			if (steamappsCommonDefault.exists()) {
 				findProtonVersions("User Proton: ", steamappsCommonDefault, installs, protonVersions);
 			}
-			steamappsCommonDefault = new File(
-					System.getProperty("user.home") + "/.local/share/Steam/steamapps/common");
+			steamappsCommonDefault = new File(System.getProperty("user.home") + "/.local/share/Steam/steamapps/common");
 			if (steamappsCommonDefault.exists()) {
 				findProtonVersions("User Proton: ", steamappsCommonDefault, installs, protonVersions);
 			}
-			steamappsCommonDefault = new File(
-					System.getProperty("user.home") + "/.local/share/steam/steamapps/common");
+			steamappsCommonDefault = new File(System.getProperty("user.home") + "/.local/share/steam/steamapps/common");
 			if (steamappsCommonDefault.exists()) {
 				findProtonVersions("User Proton: ", steamappsCommonDefault, installs, protonVersions);
 			}
@@ -132,19 +128,26 @@ public class WineInstallation {
 			}
 		}
 
+		// Find user wine
+		findWine("User Wine (flatpak)", new File(
+				System.getProperty("user.home") + "/.local/share/flatpak/app/org.winehq.Wine/current/active/files/bin"),
+				null, installs, false);
+		findWine("User CrossOver",
+				new File(System.getProperty("user.home")
+						+ "/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/CrossOver-Hosted Application"),
+				null, installs, false);
+
 		// Find system wine
 		findWine("System Wine (/usr/bin)", new File("/usr/bin"), null, installs, false);
 		findWine("System Wine (/usr/local/bin)", new File("/usr/local/bin"), null, installs, false);
 		findWine("System Wine (/opt/bin)", new File("/opt/bin"), null, installs, false);
 		findWine("System Wine (/opt/homebrew/bin)", new File("/opt/homebrew/bin"), null, installs, false);
+		findWine("System Wine (flatpak)", new File("/var/lib/flatpak/app/org.winehq.Wine/current/active/files/bin"),
+				null, installs, false);
 
 		// Crossover
 		findWine("System CrossOver",
 				new File("/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/CrossOver-Hosted Application"),
-				null, installs, false);
-		findWine("User CrossOver",
-				new File(System.getProperty("user.home")
-						+ "/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/CrossOver-Hosted Application"),
 				null, installs, false);
 
 		// Bundled wine
@@ -331,8 +334,7 @@ public class WineInstallation {
 			String wineVersion = getWineVersion(wineBinary);
 			if (wineVersion != null) {
 				// Add
-				WineInstallation install = new WineInstallation(path, name,
-						name + ": " + wineVersion, false, false);
+				WineInstallation install = new WineInstallation(path, name, name + ": " + wineVersion, false, false);
 				install.isProton = isProton;
 				installs.add(install);
 			}
