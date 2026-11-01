@@ -30,8 +30,9 @@ function printStackTrace() {
 
         # Create stack entry
         local fileLine="$(echo "$callStackEntry" | sed "s/ .*//g")"
-        local fileName="$(echo "$callStackEntry" | sed "s/[0-9]* [^ ]* //g")"
-        local functionName="$(echo "$callStackEntry" | sed "s/[0-9]*//g" | sed "s/ //" | sed "s/ .*//g")()"
+        local functionNameR="$(echo "$callStackEntry" | sed "s/[0-9]*//g" | sed "s/ //" | sed "s/ .*//g")"
+        local functionName="$functionNameR()"
+        local fileName="$(echo "$callStackEntry" | sed "s/$fileLine $functionNameR //g")"
         if [ "$functionName" == "main()" ] && [ "$(readlink -f "$fileName")" == "$(readlink -f "$artifacttoolbasedir/polytool")" ]; then
             functionName="<entry>"
         fi
@@ -66,7 +67,10 @@ function require() {
     fi
 
     # Get caller
-    local currentfile="$(caller 0 | sed "s/[0-9]* [^ ]* //g")"
+    local callStackEntry="$(caller 0)"
+    local fileLine="$(echo "$callStackEntry" | sed "s/ .*//g")"
+    local functionNameR="$(echo "$callStackEntry" | sed "s/[0-9]*//g" | sed "s/ //" | sed "s/ .*//g")"
+    local currentfile="$(echo "$callStackEntry" | sed "s/$fileLine $functionNameR //g")" # FIXME: fix in menuscreen, aerynx, etc
     local localpath="$(dirname "$currentfile")"
 
     # Locate

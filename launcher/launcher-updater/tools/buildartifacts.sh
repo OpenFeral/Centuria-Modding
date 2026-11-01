@@ -4,7 +4,6 @@
 chmod +x "$0"
 artifacttoolbasedir="$(dirname "$0")"
 artifacttoolbasedir="$(readlink -f "$artifacttoolbasedir")"
-menuscreenbasedir="$artifacttoolbasedir/../menutool"
 
 # Set up environment
 source "$artifacttoolbasedir/src/env.sh"
