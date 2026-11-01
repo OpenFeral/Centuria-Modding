@@ -14,8 +14,8 @@ function build_shared() {
     # The from-assets call allows taking files from the assets folders as sources
     # Accepts: <path>
 
-    chmod +x $BUILD_CWD/gradlew
-    (cd $BUILD_CWD ; ./gradlew build) || exit 1
+    chmod +x "$BUILD_CWD/gradlew"
+    (cd "$BUILD_CWD" ; ./gradlew build) || exit 1
     from-cwd build/Installations
     from-assets base/share/common
 }
