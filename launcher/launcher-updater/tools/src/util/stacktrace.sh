@@ -13,8 +13,9 @@ function printStackTrace() {
 
         # Create stack entry
         local fileLine="$(echo "$callStackEntry" | sed "s/ .*//g")"
-        local fileName="$(echo "$callStackEntry" | sed "s/[0-9]* [^ ]* //g")"
-        local functionName="$(echo "$callStackEntry" | sed "s/[0-9]*//g" | sed "s/ //" | sed "s/ .*//g")()"
+        local functionNameR="$(echo "$callStackEntry" | sed "s/[0-9]*//g" | sed "s/ //" | sed "s/ .*//g")"
+        local functionName="$functionNameR()"
+        local fileName="$(echo "$callStackEntry" | sed "s/$fileLine $functionNameR //g")"
         if [ "$functionName" == "main()" ] && [ "$(readlink -f "$fileName")" == "$(readlink -f "$artifacttoolbasedir/polytool")" ]; then
             functionName="<entry>"
         fi
