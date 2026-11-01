@@ -2243,7 +2243,7 @@ public class LauncherUpdaterMain {
 				String jvmVer = jvm.listFiles(t -> t.isDirectory() && t.getName().startsWith("java-"))[0].getName();
 
 				// Create shortcuts
-				if (createStartMenu) {
+				if (createShortcutDesktop) {
 					File lnk = new File(winDesktop, srvName + ".lnk");
 					if (!lnk.getParentFile().exists())
 						lnk.getParentFile().mkdirs();
@@ -2251,7 +2251,7 @@ public class LauncherUpdaterMain {
 							"-cp '" + classPath + "' org.asf.centuria.launcher.updater.LauncherUpdaterMain",
 							launcherOut, new File(launcherOut, "icon.ico"));
 				}
-				if (createShortcutDesktop) {
+				if (createStartMenu) {
 					File lnk = new File(new File(System.getenv("APPDATA"), "Microsoft/Windows/Start Menu/Programs"),
 							srvName + ".lnk");
 					if (!lnk.getParentFile().exists())
