@@ -543,9 +543,9 @@ public class DataProcessor extends HttpRequestHandler {
 				getResponse().setContent("text/json", res.toString());
 				return;
 			} else if (path.endsWith("/clientmods/assemblies/index.json")
-					&& path.endsWith("/clientmods/assemblies-osx/index.json")
-					&& path.endsWith("/clientmods/assemblies-win64/index.json")
-					&& path.endsWith("/clientmods/assemblies-linux/index.json")) {
+					|| path.endsWith("/clientmods/assemblies-osx/index.json")
+					|| path.endsWith("/clientmods/assemblies-win64/index.json")
+					|| path.endsWith("/clientmods/assemblies-linux/index.json")) {
 				if (!reqFile.getParentFile().exists()) {
 					this.setResponseStatus(404, "Not found");
 					this.setResponseContent("text/json", "{\"error\":\"file_not_found\"}");
@@ -565,9 +565,9 @@ public class DataProcessor extends HttpRequestHandler {
 				getResponse().setContent("text/json", res.toString());
 				return;
 			} else if (path.endsWith("/clientmods/assets/index.json")
-					&& path.endsWith("/clientmods/assets-osx/index.json")
-					&& path.endsWith("/clientmods/assets-win64/index.json")
-					&& path.endsWith("/clientmods/assets-linux/index.json")) {
+					|| path.endsWith("/clientmods/assets-osx/index.json")
+					|| path.endsWith("/clientmods/assets-win64/index.json")
+					|| path.endsWith("/clientmods/assets-linux/index.json")) {
 				if (!reqFile.getParentFile().exists()) {
 					this.setResponseStatus(404, "Not found");
 					this.setResponseContent("text/json", "{\"error\":\"file_not_found\"}");
@@ -697,7 +697,7 @@ public class DataProcessor extends HttpRequestHandler {
 							// Lets change that to the local server
 							upstream = ((this.getServer() instanceof TlsSecuredHttpServer) ? "https" : "http") + "://"
 									+ addr + ":" + ((NetworkedConnectiveHttpServer) this.getServer()).getListenPort()
-									+ "/" + upstream.substring(url.length());
+									+ "/data/" + upstream.substring(url.length());
 							hosts.addProperty("launcherDataSource", upstream);
 						}
 					}
