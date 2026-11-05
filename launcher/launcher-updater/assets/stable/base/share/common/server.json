@@ -1,9 +1,0 @@
-{
-	"serverConfig": "https://launcher.emuferal.openferal.net/servers/emuferal-online/stable",
-	"launcherDirName": "emuferal-online",
-	"serverName": "EmuFeral Online",
-
-	"urlProtocols": {
-		"emuferal-online": "--launch-url %url%"
-	}
-}
