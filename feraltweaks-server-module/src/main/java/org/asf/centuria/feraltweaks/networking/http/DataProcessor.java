@@ -606,7 +606,7 @@ public class DataProcessor extends HttpRequestHandler {
 						String url = module.upstreamServerJsonURL;
 						if (!url.endsWith("/"))
 							url = url + "/";
-						HttpURLConnection conn = (HttpURLConnection) new URL(url + "data/" + path).openConnection();
+						HttpURLConnection conn = (HttpURLConnection) new URL(url + path).openConnection();
 						InputStream strm = conn.getInputStream();
 						String data = new String(strm.readAllBytes(), "UTF-8");
 						Files.writeString(new File(cachedServerFileDir, "upstream.server.json").toPath(), data);
