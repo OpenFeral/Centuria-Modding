@@ -5,7 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -164,7 +166,14 @@ public class FeralTweaksModule implements ICenturiaModule {
 		logger.info("Preparing contentserver... Finding module packages...");
 		for (ICenturiaModule module : ModuleManager.getInstance().getAllModules()) {
 			URL loc = module.getClass().getProtectionDomain().getCodeSource().getLocation();
-			String f = loc.getFile();
+			String f;
+			try {
+				f = URLDecoder.decode(loc.getFile(), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				logger.warn("Unable to load module source " + module.id() + ": " + loc.getFile()
+						+ ", please report this as a bug!");
+				continue;
+			}
 			File file = new File(f);
 			if (!file.exists())
 				logger.warn(
