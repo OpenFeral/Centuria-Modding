@@ -1,3 +1,0 @@
-#!/bin/sh
-chmod +x launcher.sh
-./launcher.sh

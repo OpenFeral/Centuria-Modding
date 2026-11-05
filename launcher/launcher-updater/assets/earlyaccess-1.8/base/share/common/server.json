@@ -1,9 +1,0 @@
-{
-	"serverConfig": "https://launcher.emuferal.openferal.net/servers/emuferal-online/earlyaccess-1.8",
-	"launcherDirName": "emuferal-online-ea18",
-	"serverName": "EmuFeral Online - Beta 1.8 Early Access",
-
-	"urlProtocols": {
-		"emuferal-online-ea18": "--launch-url %url%"
-	}
-}

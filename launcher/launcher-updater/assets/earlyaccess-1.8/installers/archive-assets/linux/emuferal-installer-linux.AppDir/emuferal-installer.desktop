@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=EmuFeral Installer
-Exec=emuferal-installer
-Icon=emuferal-installer
-Type=Application
-Categories=Utility;
-StartupNotify=true
-X-KDE-RunOnDiscreteGpu=true
