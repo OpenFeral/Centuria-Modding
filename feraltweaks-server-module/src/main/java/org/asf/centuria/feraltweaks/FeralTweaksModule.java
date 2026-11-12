@@ -322,7 +322,7 @@ public class FeralTweaksModule implements ICenturiaModule {
 
 		// Init managers
 		ScheduledMaintenanceManager.initMaintenanceManager();
-		PlayerNameManager.initPlayerNameManager();
+		PlayerNameManager.getInstance().initPlayerNameManager();
 
 		// Bind events
 		EventBus.getInstance().addAllEventsFromReceiver(new CommandHandlers());
@@ -357,7 +357,7 @@ public class FeralTweaksModule implements ICenturiaModule {
 		// Check type
 		if (event.getModerationEventID() == "permissions.update" && event.getTarget() != null) {
 			// Update target's display
-			PlayerNameManager.updatePlayer(event.getTarget());
+			PlayerNameManager.getInstance().updateAllPlayers(event.getTarget());
 		}
 	}
 
