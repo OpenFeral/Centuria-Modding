@@ -201,7 +201,7 @@ patch 4444
 				"componentClass": "LocalizationDefComponent",
 				"componentJSON": {
 					"needsTranslation": true,
-					"en": "choose your login name, this is used in login",
+					"en": "choose your login name",
 					"fr": "",
 					"de": "",
 					"es": "",

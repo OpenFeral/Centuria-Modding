@@ -37,7 +37,7 @@ AllowShinigamiGlidingWithNoWings=true
 
 # UI
 DefaultAvatarActionOrder=[8930, 9108, 9116, 9121, 9122, 9143, 9151, 9190]
-VersionLabel=${global:7358}\nCenturia ${server:version}\nFer.al ${game:version} (build ${game:build})\n\nBETA 1.8 EARLY ACCESS 1
+VersionLabel=${global:7358}\nCenturia ${server:version}\nFer.al ${game:version} (build ${game:build})\n\nBETA 1.8 EARLY ACCESS 2
 EnableGroupChatTab=true
 
 # Game assets

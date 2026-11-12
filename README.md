@@ -1,4 +1,10 @@
-[![FTL Loader Build (Win64)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/win64-build.yml/badge.svg)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/win64-build.yml)  [![FTL Loader Build (OSX)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/osx-build.yml/badge.svg)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/osx-build.yml) 
+ [![FTL Loader Build (Win64)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/win64-build.yml/badge.svg)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/win64-build.yml) [![FTL Loader Build (OSX)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/osx-build.yml/badge.svg)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/osx-build.yml) [![FTL Loader Build (Android)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/android-arm64-build.yml/badge.svg)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/android-arm64-build.yml) [![FT CLI Build (Win64)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/ftl-cli-win64-build.yml/badge.svg)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/ftl-cli-win64-build.yml) [![FT CLI Build (Linux)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/ftl-cli-linux-build.yml/badge.svg)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/ftl-cli-linux-build.yml) [![FT CLI Build (OSX)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/ftl-cli-win64-build.yml/badge.svg)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/ftl-cli-osx-build.yml) 
+
+ [![FeralTweaks Build](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/ft-basemod-build.yml/badge.svg)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/ft-basemod-build.yml) [![FeralTweaks Server Build](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/ft-server-build.yml/badge.svg)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/ft-server-build.yml) [![DiscordRPC Build](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/discordrpc-build.yml/badge.svg)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/discordrpc-build.yml) [![EmuFeral Content Build](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/emuferal-content-build.yml/badge.svg)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/emuferal-content-build.yml) [![FeralTweaks Server Build](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/ft-server-build.yml/badge.svg)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/ft-server-build.yml) [![Launcher Build](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/launcher-build.yml/badge.svg)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/launcher-build.yml) [![Android Launcher Build](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/android-launcher-build.yml/badge.svg)](https://github.com/SkySwimmer/Centuria-Modding/actions/workflows/android-launcher-build.yml)
+
+ ![Launcher version](https://img.shields.io/badge/Launcher%20Version-1.0.0.A16-gold.svg) ![EmuFeral Content version](https://img.shields.io/badge/EmuFeral%20Content%20Version-Beta%201.8-gold.svg) ![Bootstrap version](https://img.shields.io/badge/FTL%20Bootstrap%20Version-v1.0.0--alpha--a6-blueviolet.svg) ![Loader version](https://img.shields.io/badge/FTL%20Loader%20Version-v1.0.0--alpha--a6-darkorchid.svg) ![FT version](https://img.shields.io/badge/FeralTweaks%20Version-beta--1.0.0--b6-cyan.svg) ![FeralTweaks Server version](https://img.shields.io/badge/FeralTWeaks%20Server%20Version-beta--1.0.0--b5-cyan.svg) ![DisordRPC version](https://img.shields.io/badge/DiscordRPC%20Mod%20Version-1.0.0.0-a8b3de.svg)
+ 
+ ![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg) ![Copyright](https://img.shields.io/badge/Copyright-Copyright(c)%202025%20Nexus%20Emulation-blue.svg)
 
 # The Centuria Modding Project
 This is the repository for the official [Centuria](https://github.com/CPeers1/Centuria) modding project. This repository contains client modding code and server modules designed to patch up and modify parts of the original game.
@@ -13,6 +19,16 @@ Note that this project is a HEAVY WIP and subject to change. Currently the andro
 The project is split up into multiple parts, `feraltweaks`, `feraltweaks-bootstrap` (FTL modloader), the launcher and the server modules needed for the mod handshake and mod download system.
 
 <br/>
+
+## Setup
+First, set up dependencies:
+
+```
+mkdir deps
+git clone https://github.com/SkySwimmer/ScaffoldSharp deps/ScaffoldSharp
+```
+
+ScaffoldSharp is needed as it is a framework used by the modloader and its mods. Its a modularity framework developed by us in-house, used primarily for its dynamic instance managing.
 
 ## Building the Desktop client mod (feraltweaks)
 Feraltweaks is a FTL mod, in order to build it you will need .NET cli installed.

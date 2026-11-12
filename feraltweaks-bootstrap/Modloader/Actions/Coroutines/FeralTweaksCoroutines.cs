@@ -13,8 +13,15 @@ namespace FeralTweaks.Actions
     /// [HarmonyPatch(typeof(ObjectExample), "RunCoroutine")]
     /// private static void RunCoroutine(ObjectExample __instance, ref Il2CppSystem.Collections.IEnumerator __result)
     /// {
-    ///     __result = FeralTweaksCoroutines.InjectAtStart(__result, FeralTweaksCoroutines.CreateNew(builder => {
-    ///          builder.Execute(() => { __instance.SomeCall(); })
+    ///     __result = FeralTweaksCoroutines.InjectAtStart(__result, FeralTweaksCoroutines.CreateNew(builder => 
+    ///     {
+    ///          builder.OnFrame(builder.Execute(() => 
+    ///          {
+    ///             __instance.SomeCall();
+    ///          })).OnNextFrame(builder.Execute(() =>
+    ///          {
+    ///             __instance.SomeOtherCall();
+    ///          }));
     ///     });
     /// }
     /// </code> 

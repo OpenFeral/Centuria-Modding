@@ -107,112 +107,161 @@ namespace feraltweaks.Patches.AssemblyCSharp
         {
             return FeralTweaksCoroutines.CreateNew(t =>
             {
-                // First phase: action
-                t.Execute(ctx =>
-                {
-                    ctx = ctx;
+                // t.OnFrame(t.Execute(() =>
+                // {
+                //     // Something to execute
+                // }).OnComplete(result => t.Execute(() =>
+                // {
+                //     // Executed on complete
+                // })).OnError(t.Execute(() =>
+                // {
+                //     // Executed on error 
+                // })).Then(t.Execute(() =>
+                // {
+                //     // Executed on same frame
+                // }))).OnNextFrame(t.Execute(() =>
+                // {
+                //     // On next frame
+                // }));
 
-                    // Create promise
-                    FeralTweaksPromiseController testPromise1 = FeralTweaksPromises.CreatePromise();
-                    testPromise1.GetPromise().OnComplete(() =>
-                    {
-                        GetType();
-                    });
-                    testPromise1.CallComplete();
-                    FeralTweaksPromiseController<string> testPromise2 = FeralTweaksPromises.CreatePromise<string>();
-                    testPromise2.GetPromise().OnComplete(res =>
-                    {
-                        res = res;
-                    });
-                    FeralTweaksActions.Async.Oneshot(() => testPromise2.CallComplete("test"));
 
-                    // Run a test code
-                    FeralTweaksActions.Async.Oneshot(async () =>
-                    {
-                        FeralTweaksAction<string> func = FeralTweaksActions.Async.Oneshot<string>((ctx) =>
-                        {
-                            return "test";
-                        });
-                        string test = await func;
-                        test = test;
-                    }).AwaitComplete();
+                // t.OnNextFrame(t.AwaitPromise(() =>
+                // {
+                //     return FeralTweaksPromises.CreatePromise().GetPromise();
+                // }).OnComplete(result => t.Execute(() =>
+                // {
 
-                    // Run something async
-                    FeralTweaksActions.Async.Oneshot<string>((ctx) =>
-                    {
-                        // Runs outside of unity
-                        // Say a webrequest
-                        return "test";
-                    }).OnComplete(result =>
-                    {
-                        // Do something with the result
-                        // OnComplete runs on unity, or on the event queue, it runs on the queue used previously
-                        result = result;
-                    }).AwaitComplete();
+                // }).Then()));
 
-                    // Test
-                    Action<int, string> ac = (test1, test) =>
-                    {
-                        Action callback = FeralTweaksCallbacks.CreateQueuedWrapper(() =>
-                        {
-                            test = test;
-                        });
-                        FeralTweaksActions.EventQueue.Oneshot(callback);
-                    };
-                    ac(1, "hi");
+                // // First phase: action
+                // t.OnFrame(t.Execute(ctx =>
+                // {
+                //     ctx = ctx;
 
-                    // Create test
-                    GameObject test = new GameObject("test");
-                    test.AddComponent<TestBehaviour>();
-                    GameObject.DontDestroyOnLoad(test);
-                    test = test;
+                //     FeralTweaksActions.EventQueue.Oneshot(() =>
+                //     {
+                //         ctx = ctx;
+                //     }).OnComplete(() =>
+                //     {
+                //         // Handle
+                //     }).OnError(() =>
+                //     {
+                //         // Error
+                //     });
 
-                    // Test
-                    FeralTweaksActions.Unity.Oneshot(() =>
-                    {
-                        // Wait for core to init
-                        if (!Core.Loaded)
-                            return false;
+                //     // Create promise
+                //     long time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                //     FeralTweaksPromiseController testPromise1 = FeralTweaksPromises.CreatePromise();
+                //     testPromise1.GetPromise().OnComplete(() =>
+                //     {
+                //         long length = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - time;
+                //         GetType();
+                //     });
+                //     testPromise1.CallComplete();
 
-                        // Pull behaviours attached to test manager
-                        TestBehaviour[] behaviours = this.GetAllLinkedBehaviours<TestBehaviour>();
-                        behaviours = behaviours;
+                //     time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                //     FeralTweaksPromiseController<string> testPromise2 = FeralTweaksPromises.CreatePromise<string>();
+                //     testPromise2.GetPromise().OnComplete(res =>
+                //     {
+                //         long length = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - time;
+                //         res = res;
+                //     });
+                //     FeralTweaksActions.Async.Oneshot(() => testPromise2.CallComplete("test"));
 
-                        // Finish
-                        return true;
-                    });
+                //     // Run a test code
+                //     long time2 = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                //     FeralTweaksActions.Async.Oneshot(async () =>
+                //     {
+                //         FeralTweaksAction<string> func = FeralTweaksActions.Async.Oneshot<string>((ctx) =>
+                //         {
+                //             long length = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - time2;
+                //             return "test";
+                //         });
+                //         string test = await func;
+                //         test = test;
+                //     }).AwaitComplete();
 
-                    // FIXME: remove manager
-                }, out CoroutineResultReference<Il2CppSystem.Object> ac1);
+                //     // Run something async
+                //     long time3 = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                //     FeralTweaksActions.Async.Oneshot<string>((ctx) =>
+                //     {
+                //         // Runs outside of unity
+                //         // Say a webrequest
+                //         return "test";
+                //     }).OnComplete(result =>
+                //     {
+                //         // Do something with the result
+                //         // OnComplete runs on unity, or on the event queue, it runs on the queue used previously
+                //         long length = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - time3;
+                //         result = result;
+                //     }).AwaitComplete();
 
-                // Next phase: coroutine
-                t.ExecuteCoroutine(() => InitCoroutineCustom(ac1), out CoroutineResultReference<System.Collections.IEnumerator> ac2CR);
+                //     // Test
+                //     Action<int, string> ac = (test1, test) =>
+                //     {
+                //         Action callback = FeralTweaksCallbacks.CreateQueuedWrapper(() =>
+                //         {
+                //             test = test;
+                //         });
+                //         FeralTweaksActions.EventQueue.Oneshot(callback);
+                //     };
+                //     ac(1, "hi");
 
-                // Run promise
-                t.AwaitPromise(() => FetchDataAsync(), out CoroutineResultReference<string> promise);
+                //     // Create test
+                //     GameObject test = new GameObject("test");
+                //     test.AddComponent<TestBehaviour>();
+                //     GameObject.DontDestroyOnLoad(test);
+                //     test = test;
 
-                // Await action
-                t.AwaitAction(() => FeralTweaksActions.Async.Oneshot(() =>
-                {
-                    promise = promise;
-                }), out CoroutineResultReference<FeralTweaksAction<object>> acFtA1);
+                //     // Test
+                //     FeralTweaksActions.Unity.Oneshot(() =>
+                //     {
+                //         // Wait for core to init
+                //         if (!Core.Loaded)
+                //             return false;
 
-                // Next phase: FT action
-                t.AwaitAction(() => FeralTweaksActions.Async.AfterSecs<string>(10, ctx =>
-                {
-                    promise = promise;
-                    return "test";
-                }), out CoroutineResultReference<FeralTweaksAction<string>> acFtA);
+                //         // Pull behaviours attached to test manager
+                //         TestBehaviour[] behaviours = this.GetAllLinkedBehaviours<TestBehaviour>();
+                //         behaviours = behaviours;
 
-                // Next phase: action
-                t.Execute(ctx =>
-                {
-                    // Get result
-                    string s = acFtA.ReturnValue.GetResult();
+                //         // Finish
+                //         return true;
+                //     });
 
-                    // Test
-                    ctx = ctx;
-                });
+                //     // FIXME: remove manager
+                // }, out CoroutineResultReference<Il2CppSystem.Object> ac1));
+
+                // // Next phase: coroutine
+                // t.OnFrame(t.ExecuteCoroutine(() => InitCoroutineCustom(ac1), out CoroutineResultReference<System.Collections.IEnumerator> ac2CR));
+
+                // // Run promise
+                // t.OnFrame(t.AwaitPromise(() => FetchDataAsync(), out CoroutineResultReference<FeralTweaksPromise<string>> promise).OnResult(() =>
+                // {
+                //     // Result
+                // }));
+
+                // // Await action
+                // t.OnFrame(t.AwaitAction(() => FeralTweaksActions.Async.Oneshot(() =>
+                // {
+                //     promise = promise;
+                // }), out CoroutineResultReference<FeralTweaksAction<object>> acFtA1));
+
+                // // Next phase: FT action
+                // t.OnFrame(t.AwaitAction(() => FeralTweaksActions.Async.AfterSecs<string>(10, ctx =>
+                // {
+                //     promise = promise;
+                //     return "test";
+                // }), out CoroutineResultReference<FeralTweaksAction<string>> acFtA));
+
+                // // Next phase: action
+                // t.OnFrame(t.Execute(ctx =>
+                // {
+                //     // Get result
+                //     string s = acFtA.ReturnValue.GetResult();
+
+                //     // Test
+                //     ctx = ctx;
+                // }));
 
             });
         }

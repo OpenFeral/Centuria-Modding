@@ -5,6 +5,7 @@ using UnityEngine;
 using ScaffoldSharp.Core.AsyncTasks;
 using Logger = FeralTweaks.Logging.Logger;
 using System.Diagnostics;
+using System.Linq;
 
 namespace FeralTweaks.Actions
 {
