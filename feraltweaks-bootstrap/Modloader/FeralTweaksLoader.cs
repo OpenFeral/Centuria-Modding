@@ -16,7 +16,7 @@ namespace FeralTweaks
     /// </summary>
     public static class FeralTweaksLoader
     {
-        public const string VERSION = "v1.0.0-alpha-a4";
+        public const string VERSION = "v1.5-alpha-a4";
         private static List<FeralTweaksMod> mods;
 
         private static Logger logger;
@@ -561,15 +561,25 @@ namespace FeralTweaks
                 if (!modDirs.Contains(dir))
                 {
                     // Add folder to assembly resolution
+                    Dictionary<string, Assembly> assemblyCache = new Dictionary<string, Assembly>();
                     AppDomain.CurrentDomain.AssemblyResolve += (s, args) =>
                     {
                         // Attempt to resolve
                         AssemblyName nm = new AssemblyName(args.Name);
+
+                        // Check cache
+                        if (assemblyCache.ContainsKey(nm.FullName))
+                            return assemblyCache[nm.FullName];
+
+                        // Find file
+                        Assembly res = null;
                         if (File.Exists(dir + "/" + nm.Name + ".dll"))
                         {
-                            return Assembly.LoadFile(Path.GetFullPath(dir + "/" + nm.Name + ".dll"));
+                            res = Assembly.LoadFrom(Path.GetFullPath(dir + "/" + nm.Name + ".dll"));
                         }
-                        return null;
+                        if (res != null)
+                            assemblyCache[nm.FullName] = res;
+                        return res;
                     };
                     modDirs.Add(dir);
                     LogDebug("Added " + dir + " to assembly resolution.");

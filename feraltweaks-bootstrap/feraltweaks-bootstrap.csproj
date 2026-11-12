@@ -5,7 +5,7 @@
     <OutputPath>run\FeralTweaks</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>12</LangVersion>
     <AssemblyName>FeralTweaksBootstrap</AssemblyName>
     <RootNamespace>FeralTweaksBootstrap</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
