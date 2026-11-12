@@ -29,7 +29,7 @@ namespace FeralTweaksBootstrap
 {
     public static class Bootstrap
     {
-        public const string VERSION = "v1.0.0-alpha-a3";
+        public const string VERSION = "v1.2-alpha-a3";
         private static Il2CppInteropRuntime runtime;
         private static RuntimeInvokeDetourContainer runtimeInvokeDetour;
         private static string GameAssemblyPath;
@@ -1123,29 +1123,37 @@ namespace FeralTweaksBootstrap
 
             // Bind resolve
             LogInfo("Binding assembly resolution...");
+            Dictionary<string, Assembly> assemblyCache = new Dictionary<string, Assembly>();
             AppDomain.CurrentDomain.AssemblyResolve += (s, args) =>
             {
                 // Attempt to resolve
                 AssemblyName nm = new AssemblyName(args.Name);
 
-                // Hook
+                // Resolve if needed
+                Assembly res = null;
                 if (ResolveAssembly != null)
                 {
-                    Assembly res = ResolveAssembly.Invoke(nm, args.RequestingAssembly);
+                    res = ResolveAssembly.Invoke(nm, args.RequestingAssembly);
                     if (res != null)
                         return res;
                 }
 
+                // Check cache
+                if (assemblyCache.ContainsKey(nm.Name))
+                    return assemblyCache[nm.Name];
+
                 // Handle it ourselves
                 if (File.Exists("FeralTweaks/cache/assemblies/" + nm.Name + ".dll"))
                 {
-                    return Assembly.LoadFile(Path.GetFullPath("FeralTweaks/cache/assemblies/" + nm.Name + ".dll"));
+                    res = Assembly.Load(File.ReadAllBytes("FeralTweaks/cache/assemblies/" + nm.Name + ".dll"));
                 }
                 else if (File.Exists("FeralTweaks/cache/unity/" + nm.Name + ".dll"))
                 {
-                    return Assembly.LoadFile(Path.GetFullPath("FeralTweaks/cache/unity/" + nm.Name + ".dll"));
+                    res = Assembly.Load(File.ReadAllBytes("FeralTweaks/cache/unity/" + nm.Name + ".dll"));
                 }
-                return null;
+                if (res != null)
+                    assemblyCache[nm.Name] = res;
+                return res;
             };
 
             // Set resolver

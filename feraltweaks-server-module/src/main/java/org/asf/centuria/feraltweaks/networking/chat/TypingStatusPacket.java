@@ -66,7 +66,7 @@ public class TypingStatusPacket extends AbstractChatPacket {
 				if (cl.getObject(TypingStatusSupported.class) != null && cl.isInRoom(conversationId)) {
 					// Check states
 					if (playerInstLocal != null && playerInstLocal.ghostMode
-							&& GameServer.hasPerm(permLevelR, "moderator"))
+							&& !GameServer.hasPerm(permLevelR, "moderator"))
 						continue; // Ghosting
 
 					// Check block

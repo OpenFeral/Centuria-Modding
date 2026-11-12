@@ -7,6 +7,7 @@ import java.util.Map;
 import org.asf.centuria.Centuria;
 import org.asf.centuria.accounts.SaveMode;
 import org.asf.centuria.data.XtReader;
+import org.asf.centuria.entities.players.Player;
 import org.asf.centuria.feraltweaks.FeralTweaksClientObject;
 import org.asf.centuria.feraltweaks.FeralTweaksModule;
 import org.asf.centuria.feraltweaks.api.versioning.IModVersionHandler;
@@ -276,8 +277,8 @@ public class GameHandshakeHandler implements IEventReceiver {
 					event.getClient().addObject(new FeralTweaksClientObject(true, ver, mods));
 					feralTweaks = true;
 
-					// Set
-					PlayerNameManager.updatePlayer(event.getAccount());
+					// Set displaynames
+					PlayerNameManager.getInstance().syncToPlayer(((Player) event.getClient().container));
 					break;
 				}
 			}

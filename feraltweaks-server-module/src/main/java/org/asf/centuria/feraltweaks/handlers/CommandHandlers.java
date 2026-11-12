@@ -144,7 +144,7 @@ public class CommandHandlers implements IEventReceiver {
 					HashMap<String, String> details = new HashMap<String, String>();
 					EventBus.getInstance()
 							.dispatchEvent(new MiscModerationEvent("cancelmaintenance", "Server maintenance cancelled",
-									details, event.getClient().getPlayer().getAccountID(), null));
+									details, event.getClient().getPlayer().getAccountID(), null, false));
 
 					return;
 				}
@@ -185,7 +185,7 @@ public class CommandHandlers implements IEventReceiver {
 				HashMap<String, String> details = new HashMap<String, String>();
 				details.put("Message", event.getCommandArguments()[0]);
 				EventBus.getInstance().dispatchEvent(new MiscModerationEvent("announce", "Made a server announcement",
-						details, event.getClient().getPlayer().getAccountID(), null));
+						details, event.getClient().getPlayer().getAccountID(), null, false));
 
 				break;
 			}

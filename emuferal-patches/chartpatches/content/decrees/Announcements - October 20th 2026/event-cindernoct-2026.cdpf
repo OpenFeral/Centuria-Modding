@@ -1,0 +1,96 @@
+#
+# Cindernoct 2026
+#
+
+setchart CraftableItemChart
+
+def decreeboard:emuferal:cindernoct_2026
+	{
+		"templateClass": "DecreeTemplate",
+		"templateFormatHash": "5f8ba791578e887d01abbf928e547f2f",
+		"components": [
+			{
+				"componentClass": "DecreeDefComponent",
+				"componentJSON": {
+					"localizedHeaderDefId": "decreeboard:emuferal:cindernoct_2026.header.text",
+					"localizedMessageDefId": "decreeboard:emuferal:cindernoct_2026.message.text",
+					"imageDefID": "-1",
+					"decreeCategory": 0,
+					"decreeLayoutType": 3
+				}
+			},
+			{
+				"componentClass": "AvailabilityDefComponent",
+				"componentJSON":
+				{
+				    "dateOverrideRef": {
+				        "_defID": "-1"
+				    },
+				    "chartDateAvailability": {
+				        "_ignoreYear": true,
+				        "_repeatMode": 1,
+				        "_dateStart": "",
+				        "_dateEnd": ""
+				    }
+				}
+			},
+			{
+				"componentClass": "DecreeDateDefComponent",
+				"componentIsCustom": true,
+				"componentJSON": {
+					"decreeDate": "10/20/2026 03:00"
+				}
+			}
+		]
+	}
+enddef
+
+setchart LocalizationChart
+
+def decreeboard:emuferal:cindernoct_2026.header.text
+	{
+		"templateClass": "LocalizationTemplate",
+		"templateFormatHash": "392f1dafc8ef6ce858720cbef5e34ebc",
+		"components": [
+			{
+				"componentClass": "LocalizationDefComponent",
+				"componentJSON": {
+					"needsTranslation": true,
+					"en": "Cindernoct 2026 - An Art Event!",
+					"fr": "",
+					"de": "",
+					"es": "",
+					"pt": ""
+				}
+			},
+			{
+				"componentClass": "OldLocalizationDefComponent",
+				"componentJSON": {}
+			}
+		]
+	}
+enddef
+
+def decreeboard:emuferal:cindernoct_2026.message.text
+	{
+		"templateClass": "LocalizationTemplate",
+		"templateFormatHash": "392f1dafc8ef6ce858720cbef5e34ebc",
+		"components": [
+			{
+				"componentClass": "LocalizationDefComponent",
+				"componentJSON": {
+					"needsTranslation": true,
+					"en": "<size=120%><b>Astoria, Attis, and Visoria have aligned; Cindernoct has once again arrived!</b></size>\nGreetings Sparks and Spirits! It's the spookiest time of the year again, Cindernoct! This year will focus more on an art gallery created by the community!\n\nAs we slowly return to hosting community events, we are starting by taking things slow for now. And, as we are aware that this announcement is a bit late to the party this year, we are keeping this cindernoct event simpler. So, for this year, all players are free to come up with their own themes and create something that truly sparks their creativity.\n\nThis year's event will only be a meet-up as a way to help us and the community ease back into community events! \n\n\n<size=120%><b>The Art Gallery - Bring your own ideas to life!</b></size>\nAll players are free to come up with their own ideas and themes; everyone is welcome to design an avatar and/or sanctuary this year!\n\nHowever, due to the late event announcement, please do not feel pressured or rush yourself; this event is more of an art gallery than a competition, and doesn’t necessarily have to fit into a spooky theme. The next event will have more time for creativity...\n\nWhile we do encourage the use of spooky and magical themes, any creations you can think of, or have made before, are welcome. All we ask is that all players keep the server rules in mind and to be creative!\n\n\n<size=120%><b>Cindernoct Meet-up and Creativity Showcase!</b></size>\nThe meet-up will be held on October 30, 2026 at 2:00 PM CST. We will start in Centuria and will continue by visiting and exploring other players' sanctuaries! During this part of the event, we will be showing off all the entries! \n\nWe can’t wait to see your amazing creations for this year's event and the next!\n\n<color=\"blue\">View the Fer.ever discord for more information! You can find the art gallery entry threads and further details under #emulator-events!</color>\n\n\n<size=60%>(The magic of the moons has swept over us once more... The winds of the tundra drawing ever near, whispers of tales untold fall upon a spark's ear... Creativity's story is waiting to be told...)</size>",
+					"fr": "",
+					"de": "",
+					"es": "",
+					"pt": ""
+				}
+			},
+			{
+				"componentClass": "OldLocalizationDefComponent",
+				"componentJSON": {}
+			}
+		]
+	}
+enddef

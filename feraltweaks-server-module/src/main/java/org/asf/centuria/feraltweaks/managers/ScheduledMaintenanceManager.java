@@ -51,8 +51,9 @@ public class ScheduledMaintenanceManager {
 		fmt.setTimeZone(TimeZone.getTimeZone("UTC"));
 		HashMap<String, String> details = new HashMap<String, String>();
 		details.put("Maintenance start date and time", fmt.format(new Date(startTime)) + " UTC");
-		EventBus.getInstance().dispatchEvent(new MiscModerationEvent("maintenancescheduled",
-				"Server maintenance was scheduled", details, issuer == null ? "SYSTEM" : issuer.getAccountID(), null));
+		EventBus.getInstance()
+				.dispatchEvent(new MiscModerationEvent("maintenancescheduled", "Server maintenance was scheduled",
+						details, issuer == null ? "SYSTEM" : issuer.getAccountID(), null, false));
 	}
 
 	/**
@@ -179,99 +180,100 @@ public class ScheduledMaintenanceManager {
 					// Find message
 					switch ((int) remaining) {
 
-						case 15:
-						case 30:
-						case 60:
-						case 120:
-						case 180:
-						case 240: {
-							// Few hours or minutes
-							if (remaining < 60)
-								message = "Servers are scheduled to go down for maintenance soon!\n" //
-										+ "\n"//
-										+ "Servers will go down in " + remaining
-										+ " minute(s) for maintenance, during this time the servers will be unavailable.\n" //
-										+ "\n" //
-										+ "We will be back soon!";
-							else
-								message = "Servers are scheduled to go down for maintenance soon!\n" //
-										+ "\n"//
-										+ "Servers will go down in " + (remaining / 60)
-										+ " hour(s) for maintenance, during this time the servers will be unavailable.\n" //
-										+ "\n" //
-										+ "We will be back soon!";
-							break;
-						}
-
-						case 10:
-						case 5:
-						case 3:
-						case 1: {
-							// Very little time
-							message = "WARNING! Servers maintenance is gonna start very soon!\n" //
+					case 15:
+					case 30:
+					case 60:
+					case 120:
+					case 180:
+					case 240: {
+						// Few hours or minutes
+						if (remaining < 60)
+							message = "Servers are scheduled to go down for maintenance soon!\n" //
+									+ "\n"//
+									+ "Servers will go down in " + remaining
+									+ " minute(s) for maintenance, during this time the servers will be unavailable.\n" //
 									+ "\n" //
-									+ "Only " + remaining
-									+ " minute(s) remaining before the servers go down for maintenance!";
-							break;
+									+ "We will be back soon!";
+						else
+							message = "Servers are scheduled to go down for maintenance soon!\n" //
+									+ "\n"//
+									+ "Servers will go down in " + (remaining / 60)
+									+ " hour(s) for maintenance, during this time the servers will be unavailable.\n" //
+									+ "\n" //
+									+ "We will be back soon!";
+						break;
+					}
+
+					case 10:
+					case 5:
+					case 3:
+					case 1: {
+						// Very little time
+						message = "WARNING! Servers maintenance is gonna start very soon!\n" //
+								+ "\n" //
+								+ "Only " + remaining
+								+ " minute(s) remaining before the servers go down for maintenance!";
+						break;
+					}
+
+					default: {
+						if (remaining > 240) {
+							SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.US);
+							fmt.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+							// More than 4 hours remaining
+							// Check amount of time since last message
+							long timeSinceLast = System.currentTimeMillis() - timeLastMessage;
+							if (timeSinceLast >= (12 * 60 * 60 * 1000)) {
+								// Create message
+								message = "There is upcoming server maintenance scheduled.\n" //
+										+ "\n" //
+										+ "Servers are scheduled to go down for maintenance at "
+										+ fmt.format(new Date(maintenanceStartTime))
+										+ " UTC, during this time the servers will be unavailable.\n" //
+										+ "\n" //
+										+ "We will be back soon!";
+							}
 						}
 
-						default: {
-							if (remaining > 240) {
-								SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.US);
-								fmt.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-								// More than 4 hours remaining
-								// Check amount of time since last message
-								long timeSinceLast = System.currentTimeMillis() - timeLastMessage;
-								if (timeSinceLast >= (12 * 60 * 60 * 1000)) {
-									// Create message
-									message = "There is upcoming server maintenance scheduled.\n" //
+						if (message == null) {
+							if (timeLastMessage == 0) {
+								// Generate message
+								if (remaining <= 10) {
+									message = "WARNING! Servers maintenance is gonna start very soon!\n" //
 											+ "\n" //
-											+ "Servers are scheduled to go down for maintenance at "
-											+ fmt.format(new Date(maintenanceStartTime))
-											+ " UTC, during this time the servers will be unavailable.\n" //
+											+ "Only " + remaining
+											+ " minute(s) remaining before the servers go down for maintenance!";
+								} else if (remaining < 60) {
+									message = "Servers are scheduled to go down for maintenance soon!\n" //
+											+ "\n"//
+											+ "Servers will go down in " + remaining
+											+ " minute(s) for maintenance, during this time the servers will be unavailable.\n" //
 											+ "\n" //
 											+ "We will be back soon!";
-								}
-							}
-
-							if (message == null) {
-								if (timeLastMessage == 0) {
-									// Generate message
-									if (remaining <= 10) {
-										message = "WARNING! Servers maintenance is gonna start very soon!\n" //
-												+ "\n" //
-												+ "Only " + remaining
-												+ " minute(s) remaining before the servers go down for maintenance!";
-									} else if (remaining < 60) {
+								} else {
+									long hours = remaining / 60;
+									long minutes = remaining - (hours * 60);
+									if (minutes > 0) {
 										message = "Servers are scheduled to go down for maintenance soon!\n" //
 												+ "\n"//
-												+ "Servers will go down in " + remaining
+												+ "Servers will go down in " + (remaining / 60) + " hour(s) and "
+												+ minutes
 												+ " minute(s) for maintenance, during this time the servers will be unavailable.\n" //
 												+ "\n" //
 												+ "We will be back soon!";
 									} else {
-										long hours = remaining / 60;
-										long minutes = remaining - (hours * 60);
-										if (minutes > 0) {
-											message = "Servers are scheduled to go down for maintenance soon!\n" //
-													+ "\n"//
-													+ "Servers will go down in " + (remaining / 60)
-													+ " hour(s) and " + minutes + " minute(s) for maintenance, during this time the servers will be unavailable.\n" //
-													+ "\n" //
-													+ "We will be back soon!";
-										} else {
-											message = "Servers are scheduled to go down for maintenance soon!\n" //
-													+ "\n"//
-													+ "Servers will go down in " + (remaining / 60)
-													+ " hour(s) for maintenance, during this time the servers will be unavailable.\n" //
-													+ "\n" //
-													+ "We will be back soon!";
-										}
+										message = "Servers are scheduled to go down for maintenance soon!\n" //
+												+ "\n"//
+												+ "Servers will go down in " + (remaining / 60)
+												+ " hour(s) for maintenance, during this time the servers will be unavailable.\n" //
+												+ "\n" //
+												+ "We will be back soon!";
 									}
 								}
 							}
 						}
+					}
 
 					}
 

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Base64;
 
 import java.net.InetSocketAddress;
@@ -59,11 +60,23 @@ public class DataProcessor extends HttpRequestHandler {
 
 			// Check file
 			File reqFile = new File(module.ftDataPath, path);
-			if (reqFile.isDirectory()) {
+			File sourceFile = reqFile;
+			File userpatchFile = new File(module.ftUserPatchesPath, path);
+			File cachedModuleFile = new File(new File(module.ftCachePath, "moduledata"), path);
+			if (reqFile.isDirectory() && (!userpatchFile.exists() || userpatchFile.isDirectory())
+					&& (!cachedModuleFile.exists() || cachedModuleFile.isDirectory())) {
 				this.setResponseStatus(404, "Not found");
 				this.setResponseContent("text/json", "{\"error\":\"file_not_found\"}");
 				return;
 			}
+
+			// Check cache data of server modules and contentpacks
+			if (cachedModuleFile.exists() && !cachedModuleFile.isDirectory())
+				reqFile = cachedModuleFile;
+
+			// Check existence of userpatch, if found, use that one
+			if (userpatchFile.exists() && !userpatchFile.isDirectory())
+				reqFile = userpatchFile;
 
 			// Verify security
 
@@ -118,10 +131,14 @@ public class DataProcessor extends HttpRequestHandler {
 
 			// Find secure root
 			File moduleFileRoot = new File(module.ftDataPath);
+			File moduleDataFileRoot = new File(module.ftCachePath, "moduledata");
+			File userpatchFileRoot = new File(module.ftUserPatchesPath);
 			File secureRoot = reqFile.getParentFile();
 			while (true) {
 				// Check if at module root
-				if (secureRoot.getCanonicalPath().equals(moduleFileRoot.getCanonicalPath()))
+				if (secureRoot.getCanonicalPath().equals(moduleFileRoot.getCanonicalPath())
+						|| secureRoot.getCanonicalPath().equals(moduleDataFileRoot.getCanonicalPath())
+						|| secureRoot.getCanonicalPath().equals(userpatchFileRoot.getCanonicalPath()))
 					break;
 
 				// Check file
@@ -130,6 +147,43 @@ public class DataProcessor extends HttpRequestHandler {
 
 				// Get parent
 				secureRoot = secureRoot.getParentFile();
+			}
+
+			// Check module cache if using userpatches and the secure root file config cant
+			// be found
+			if (reqFile == userpatchFile && !new File(secureRoot, "ftserverdocsecurity.json").exists()) {
+				// Try with original source
+				secureRoot = cachedModuleFile.getParentFile();
+				while (true) {
+					// Check if at module root
+					if (secureRoot.getCanonicalPath().equals(moduleDataFileRoot.getCanonicalPath()))
+						break;
+
+					// Check file
+					if (new File(secureRoot, "ftserverdocsecurity.json").exists())
+						break;
+
+					// Get parent
+					secureRoot = secureRoot.getParentFile();
+				}
+			}
+
+			// Check contentpacks
+			if (reqFile != sourceFile && !new File(secureRoot, "ftserverdocsecurity.json").exists()) {
+				// Try with original source
+				secureRoot = sourceFile.getParentFile();
+				while (true) {
+					// Check if at module root
+					if (secureRoot.getCanonicalPath().equals(moduleFileRoot.getCanonicalPath()))
+						break;
+
+					// Check file
+					if (new File(secureRoot, "ftserverdocsecurity.json").exists())
+						break;
+
+					// Get parent
+					secureRoot = secureRoot.getParentFile();
+				}
 			}
 
 			// Check security
@@ -394,24 +448,46 @@ public class DataProcessor extends HttpRequestHandler {
 			}
 
 			// Check result
-			if ((!reqFile.exists() || (!reqFile.getParentFile().getCanonicalPath()
+			if ((!reqFile.exists() || ((!reqFile.getParentFile().getCanonicalPath()
 					.equalsIgnoreCase(new File(module.ftDataPath).getCanonicalPath())
 					&& !reqFile.getParentFile().getCanonicalPath().toLowerCase()
-							.startsWith(new File(module.ftDataPath).getCanonicalPath().toLowerCase() + File.separator)))
+							.startsWith(new File(module.ftDataPath).getCanonicalPath().toLowerCase() + File.separator))
+					&& (!reqFile.getParentFile().getCanonicalPath()
+							.equalsIgnoreCase(new File(module.ftUserPatchesPath).getCanonicalPath())
+							&& !reqFile.getParentFile().getCanonicalPath().toLowerCase()
+									.startsWith(new File(module.ftUserPatchesPath).getCanonicalPath().toLowerCase()
+											+ File.separator))
+					&& (!reqFile.getParentFile().getCanonicalPath()
+							.equalsIgnoreCase(new File(module.ftCachePath, "moduledata").getCanonicalPath())
+							&& !reqFile.getParentFile().getCanonicalPath().toLowerCase().startsWith(
+									new File(module.ftCachePath, "moduledata").getCanonicalPath().toLowerCase()
+											+ File.separator))))
 					&& !path.endsWith("/feraltweaks/chartpatches/index.json")
 					&& !path.endsWith("/feraltweaks/settings.props")
 					&& !path.endsWith("/clientmods/assemblies/index.json")
 					&& !path.endsWith("/clientmods/assets/index.json")
-					&& !path.endsWith("/server.json")) {
+					&& !path.endsWith("/clientmods/assemblies-osx/index.json")
+					&& !path.endsWith("/clientmods/assets-osx/index.json")
+					&& !path.endsWith("/clientmods/assemblies-win64/index.json")
+					&& !path.endsWith("/clientmods/assets-win64/index.json")
+					&& !path.endsWith("/clientmods/assemblies-linux/index.json")
+					&& !path.endsWith("/clientmods/assets-linux/index.json") && !path.endsWith("/server.json")) {
 
 				// Check if its a index json request of a different folder
 				if (path.endsWith("/index.json")) {
 					// Find path
-					File parent = reqFile.getParentFile();
-					if (parent.exists() && parent.isDirectory() && !parent.equals(new File(module.ftDataPath))) {
+					File parent = sourceFile.getParentFile();
+					File parentModuleData = cachedModuleFile.getParentFile();
+					File parentPatched = userpatchFile.getParentFile();
+					if ((parent.exists() && parent.isDirectory() && !parent.equals(new File(module.ftDataPath)))
+							|| (parentPatched.exists() && parentPatched.isDirectory()
+									&& !parentPatched.equals(new File(module.ftUserPatchesPath)))
+							|| (parentModuleData.exists() && parentModuleData.isDirectory()
+									&& !parentModuleData.equals(new File(module.ftCachePath, "moduledata")))) {
 						// Handle
 						JsonArray res = new JsonArray();
-						scan(parent, res, path.substring(0, path.lastIndexOf("index.json")));
+						scan(parent, parentModuleData, parentPatched, new ArrayList<String>(), res,
+								path.substring(0, path.lastIndexOf("index.json")));
 						getResponse().setResponseStatus(200, "OK");
 						getResponse().setContent("text/json", res.toString());
 						return;
@@ -456,12 +532,20 @@ public class DataProcessor extends HttpRequestHandler {
 
 				// Index json
 				JsonArray res = new JsonArray();
-				scan(new File(module.ftDataPath, path.substring(0, path.lastIndexOf("/index.json"))), res,
+				File reqSource = new File(module.ftDataPath, path.substring(0, path.lastIndexOf("/index.json")));
+				File reqSourcePatched = new File(module.ftUserPatchesPath,
+						path.substring(0, path.lastIndexOf("/index.json")));
+				File reqSourceCached = new File(new File(module.ftCachePath, "moduledata"),
+						path.substring(0, path.lastIndexOf("/index.json")));
+				scan(reqSource, reqSourceCached, reqSourcePatched, new ArrayList<String>(), res,
 						path.substring(0, path.lastIndexOf("/index.json")) + "/");
 				getResponse().setResponseStatus(200, "OK");
 				getResponse().setContent("text/json", res.toString());
 				return;
-			} else if (path.endsWith("/clientmods/assemblies/index.json")) {
+			} else if (path.endsWith("/clientmods/assemblies/index.json")
+					|| path.endsWith("/clientmods/assemblies-osx/index.json")
+					|| path.endsWith("/clientmods/assemblies-win64/index.json")
+					|| path.endsWith("/clientmods/assemblies-linux/index.json")) {
 				if (!reqFile.getParentFile().exists()) {
 					this.setResponseStatus(404, "Not found");
 					this.setResponseContent("text/json", "{\"error\":\"file_not_found\"}");
@@ -470,12 +554,20 @@ public class DataProcessor extends HttpRequestHandler {
 
 				// Index json
 				JsonObject res = new JsonObject();
-				scan(new File(module.ftDataPath, path.substring(0, path.lastIndexOf("/index.json"))), res,
+				File source = new File(module.ftDataPath, path.substring(0, path.lastIndexOf("/index.json")));
+				File sourcePatched = new File(module.ftUserPatchesPath,
+						path.substring(0, path.lastIndexOf("/index.json")));
+				File reqSourceCached = new File(new File(module.ftCachePath, "moduledata"),
+						path.substring(0, path.lastIndexOf("/index.json")));
+				scan(source, reqSourceCached, sourcePatched, new ArrayList<String>(), res,
 						path.substring(0, path.lastIndexOf("/index.json")) + "/", "/");
 				getResponse().setResponseStatus(200, "OK");
 				getResponse().setContent("text/json", res.toString());
 				return;
-			} else if (path.endsWith("/clientmods/assets/index.json")) {
+			} else if (path.endsWith("/clientmods/assets/index.json")
+					|| path.endsWith("/clientmods/assets-osx/index.json")
+					|| path.endsWith("/clientmods/assets-win64/index.json")
+					|| path.endsWith("/clientmods/assets-linux/index.json")) {
 				if (!reqFile.getParentFile().exists()) {
 					this.setResponseStatus(404, "Not found");
 					this.setResponseContent("text/json", "{\"error\":\"file_not_found\"}");
@@ -484,7 +576,12 @@ public class DataProcessor extends HttpRequestHandler {
 
 				// Index json
 				JsonObject res = new JsonObject();
-				scan(new File(module.ftDataPath, path.substring(0, path.lastIndexOf("/index.json"))), res,
+				File source = new File(module.ftDataPath, path.substring(0, path.lastIndexOf("/index.json")));
+				File sourcePatched = new File(module.ftUserPatchesPath,
+						path.substring(0, path.lastIndexOf("/index.json")));
+				File reqSourceCached = new File(new File(module.ftCachePath, "moduledata"),
+						path.substring(0, path.lastIndexOf("/index.json")));
+				scan(source, reqSourceCached, sourcePatched, new ArrayList<String>(), res,
 						path.substring(0, path.lastIndexOf("/index.json")) + "/", "/");
 				getResponse().setResponseStatus(200, "OK");
 				getResponse().setContent("text/json", res.toString());
@@ -494,10 +591,10 @@ public class DataProcessor extends HttpRequestHandler {
 			// Handle server.json
 			if (path.endsWith("/server.json")) {
 				// Create cache
-				File cacheDir = new File("cache/feraltweaks");
+				File cacheDir = new File(module.ftCachePath);
 				cacheDir.mkdirs();
 				File cachedServerFileDir = new File(cacheDir,
-					path.substring(0, path.length() - "/server.json".length()));
+						path.substring(0, path.length() - "/server.json".length()));
 				cachedServerFileDir.mkdirs();
 
 				// Attempt to update upstream
@@ -509,7 +606,7 @@ public class DataProcessor extends HttpRequestHandler {
 						String url = module.upstreamServerJsonURL;
 						if (!url.endsWith("/"))
 							url = url + "/";
-						HttpURLConnection conn = (HttpURLConnection) new URL(url + "data/" + path).openConnection();
+						HttpURLConnection conn = (HttpURLConnection) new URL(url + path).openConnection();
 						InputStream strm = conn.getInputStream();
 						String data = new String(strm.readAllBytes(), "UTF-8");
 						Files.writeString(new File(cachedServerFileDir, "upstream.server.json").toPath(), data);
@@ -543,14 +640,18 @@ public class DataProcessor extends HttpRequestHandler {
 						SocketAddress ad = sock.getLocalSocketAddress();
 						if (ad instanceof InetSocketAddress) {
 							InetSocketAddress iA = (InetSocketAddress) ad;
-							if (Centuria.encryptGame && (!Centuria.encryptGame || Centuria.directorServer instanceof TlsSecuredHttpServer || this.getServer() instanceof TlsSecuredHttpServer))
+							if (Centuria.encryptGame
+									&& (!Centuria.encryptGame || Centuria.directorServer instanceof TlsSecuredHttpServer
+											|| this.getServer() instanceof TlsSecuredHttpServer))
 								host = iA.getAddress().getCanonicalHostName();
 							else
 								host = iA.getAddress().getHostAddress();
 							addr = host;
 						}
 					}
-					if (host.equals("localhost") && (!Centuria.encryptGame && !(Centuria.directorServer instanceof TlsSecuredHttpServer) && !(this.getServer() instanceof TlsSecuredHttpServer)))
+					if (host.equals("localhost")
+							&& (!Centuria.encryptGame && !(Centuria.directorServer instanceof TlsSecuredHttpServer)
+									&& !(this.getServer() instanceof TlsSecuredHttpServer)))
 						addr = "127.0.0.1";
 				}
 
@@ -561,13 +662,11 @@ public class DataProcessor extends HttpRequestHandler {
 				JsonObject serverBlock = createOrGetJsonObject(serverInfo, "server");
 				JsonObject hosts = createOrGetJsonObject(serverBlock, "hosts");
 				hosts.addProperty("director",
-						((Centuria.directorServer instanceof TlsSecuredHttpServer) ? "https" : "http") + "://"
-								+ addr + ":"
-								+ ((NetworkedConnectiveHttpServer) Centuria.directorServer).getListenPort() + "/");
-				hosts.addProperty("api",
-						((this.getServer() instanceof TlsSecuredHttpServer) ? "https" : "http") + "://"
-								+ addr + ":"
-								+ ((NetworkedConnectiveHttpServer) this.getServer()).getListenPort() + "/");
+						((Centuria.directorServer instanceof TlsSecuredHttpServer) ? "https" : "http") + "://" + addr
+								+ ":" + ((NetworkedConnectiveHttpServer) Centuria.directorServer).getListenPort()
+								+ "/");
+				hosts.addProperty("api", ((this.getServer() instanceof TlsSecuredHttpServer) ? "https" : "http") + "://"
+						+ addr + ":" + ((NetworkedConnectiveHttpServer) this.getServer()).getListenPort() + "/");
 				hosts.addProperty("chat", addrRaw);
 				hosts.addProperty("voiceChat", addrRaw);
 				JsonObject ports = createOrGetJsonObject(serverBlock, "ports");
@@ -578,7 +677,9 @@ public class DataProcessor extends HttpRequestHandler {
 				serverBlock.addProperty("encryptedGame", Centuria.encryptGame);
 				serverBlock.addProperty("encryptedChat", Centuria.encryptChat);
 				serverBlock.addProperty("encryptedVoiceChat", Centuria.encryptVoiceChat);
-				serverBlock.addProperty("modVersion", (serverBlock.has("modVersion") ? serverBlock.get("modVersion").getAsString() + "-" : "") + module.modDataVersion);
+				serverBlock.addProperty("modVersion",
+						(serverBlock.has("modVersion") ? serverBlock.get("modVersion").getAsString() + "-" : "")
+								+ module.modDataVersion);
 				serverBlock.addProperty("assetVersion",
 						(serverBlock.has("assetVersion") ? serverBlock.get("assetVersion").getAsString() + "-" : "")
 								+ module.modDataVersion);
@@ -595,16 +696,25 @@ public class DataProcessor extends HttpRequestHandler {
 							// Uses upstream okaaaaaaaaay
 							// Lets change that to the local server
 							upstream = ((this.getServer() instanceof TlsSecuredHttpServer) ? "https" : "http") + "://"
-									+ addr + ":"
-									+ ((NetworkedConnectiveHttpServer) this.getServer()).getListenPort() + "/"
-									+ upstream.substring(url.length());
+									+ addr + ":" + ((NetworkedConnectiveHttpServer) this.getServer()).getListenPort()
+									+ "/data/" + upstream.substring(url.length());
 							hosts.addProperty("launcherDataSource", upstream);
 						}
 					}
 				}
-				
+
 				// Load existing data over it
-				if (reqFile.exists()) {
+				if (sourceFile.exists()) {
+					try {
+						JsonObject localServerInfo = JsonParser.parseString(Files.readString(reqFile.toPath()))
+								.getAsJsonObject();
+
+						// Load existing data over the server info block
+						mergeObject(localServerInfo, serverInfo);
+					} catch (Exception e) {
+					}
+				}
+				if (userpatchFile.exists()) {
 					try {
 						JsonObject localServerInfo = JsonParser.parseString(Files.readString(reqFile.toPath()))
 								.getAsJsonObject();
@@ -651,23 +761,83 @@ public class DataProcessor extends HttpRequestHandler {
 		return res;
 	}
 
-	private void scan(File source, JsonArray res, String prefix) {
-		for (File f : source.listFiles()) {
-			if (f.isDirectory()) {
-				// Scan
-				scan(f, res, prefix + f.getName() + "/");
-			} else
-				res.add(prefix + f.getName());
+	private void scan(File source, File sourceCache, File sourcePatched, ArrayList<String> foundFiles, JsonArray res,
+			String prefix) {
+		if (source.exists()) {
+			for (File f : source.listFiles()) {
+				if (f.isDirectory()) {
+					// Scan
+					scan(f, new File(sourceCache, f.getName()), new File(sourcePatched, f.getName()), foundFiles, res,
+							prefix + f.getName() + "/");
+				} else if (!foundFiles.contains(prefix + f.getName())) {
+					res.add(prefix + f.getName());
+					foundFiles.add(prefix + f.getName());
+				}
+			}
+		}
+		if (sourceCache.exists()) {
+			for (File f : source.listFiles()) {
+				if (f.isDirectory()) {
+					// Scan
+					scan(new File(source, f.getName()), f, new File(sourcePatched, f.getName()), foundFiles, res,
+							prefix + f.getName() + "/");
+				} else if (!foundFiles.contains(prefix + f.getName())) {
+					res.add(prefix + f.getName());
+					foundFiles.add(prefix + f.getName());
+				}
+			}
+		}
+		if (sourcePatched.exists()) {
+			for (File f : sourcePatched.listFiles()) {
+				if (f.isDirectory()) {
+					// Scan
+					scan(new File(source, f.getName()), new File(sourceCache, f.getName()), f, foundFiles, res,
+							prefix + f.getName() + "/");
+				} else if (!foundFiles.contains(prefix + f.getName())) {
+					res.add(prefix + f.getName());
+					foundFiles.add(prefix + f.getName());
+				}
+			}
 		}
 	}
 
-	private void scan(File source, JsonObject res, String prefix, String prefixOut) {
-		for (File f : source.listFiles()) {
-			if (f.isDirectory()) {
-				// Scan
-				scan(f, res, prefix + f.getName() + "/", prefixOut + f.getName() + "/");
-			} else
-				res.addProperty(prefix + f.getName(), prefixOut + f.getName());
+	private void scan(File source, File sourceCached, File sourcePatched, ArrayList<String> foundFiles, JsonObject res,
+			String prefix, String prefixOut) {
+		if (source.exists()) {
+			for (File f : source.listFiles()) {
+				if (f.isDirectory()) {
+					// Scan
+					scan(f, new File(sourceCached, f.getName()), new File(sourcePatched, f.getName()), foundFiles, res,
+							prefix + f.getName() + "/", prefixOut + f.getName() + "/");
+				} else if (!foundFiles.contains(prefix + f.getName())) {
+					res.addProperty(prefix + f.getName(), prefixOut + f.getName());
+					foundFiles.add(prefix + f.getName());
+				}
+			}
+		}
+		if (sourceCached.exists()) {
+			for (File f : sourcePatched.listFiles()) {
+				if (f.isDirectory()) {
+					// Scan
+					scan(new File(source, f.getName()), f, new File(sourcePatched, f.getName()), foundFiles, res,
+							prefix + f.getName() + "/", prefixOut + f.getName() + "/");
+				} else if (!foundFiles.contains(prefix + f.getName())) {
+					res.addProperty(prefix + f.getName(), prefixOut + f.getName());
+					foundFiles.add(prefix + f.getName());
+				}
+			}
+		}
+		if (sourcePatched.exists()) {
+			for (File f : sourcePatched.listFiles()) {
+				if (f.isDirectory()) {
+					// Scan
+					scan(new File(source, f.getName()), new File(sourceCached, f.getName()), f, foundFiles, res,
+							prefix + f.getName() + "/", prefixOut + f.getName() + "/");
+				} else if (!foundFiles.contains(prefix + f.getName())) {
+					res.addProperty(prefix + f.getName(), prefixOut + f.getName());
+					foundFiles.add(prefix + f.getName());
+				}
+			}
 		}
 	}
 
